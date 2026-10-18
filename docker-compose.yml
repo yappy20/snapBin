@@ -1,0 +1,14 @@
+services:
+  snapbin:
+    build: .
+    container_name: snapbin
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - snapbin_data:/app/data
+    ports:
+      - "8000:8000"
+
+volumes:
+  snapbin_data:

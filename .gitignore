@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+backend/*.db
+backend/data/
+backend/static/uploads/*
+!backend/static/uploads/.gitkeep
+frontend/dist_in_backend/
+.env
+node_modules/
+frontend/dist/
+.DS_Store
+*.log
+*.tsbuildinfo
