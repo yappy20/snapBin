@@ -2,39 +2,72 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --neon-yellow: #eeff26;
+  --grid-black: #0a0a0a;
+}
+
 @layer base {
   html {
     font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
   }
   body {
-    @apply text-slate-900 dark:text-slate-100;
+    @apply text-slate-900;
+    background-color: var(--neon-yellow);
+    margin: 0;
+    min-height: 100vh;
   }
 }
 
 @layer components {
+  /* The app's chrome lives directly on top of the neon-yellow/black-grid
+     canvas — inset from the true viewport edge so a yellow margin always
+     shows around it — instead of hiding it behind a solid white sheet.
+     The sidebar sits as a solid black block on the grid, and content (page
+     headers, empty states) sits right on the grid itself; individual
+     cards read as bordered white "sheets" pinned to it. */
+  .app-shell {
+    position: relative;
+    margin: clamp(20px, 4vw, 44px);
+    min-height: calc(100vh - clamp(40px, 8vw, 88px));
+    border: 3px solid var(--grid-black);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 8px 8px 0 0 rgba(10, 10, 10, 0.9);
+    background-color: var(--neon-yellow);
+    background-image:
+      linear-gradient(to right, rgba(10, 10, 10, 0.85) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(10, 10, 10, 0.85) 1px, transparent 1px);
+    background-size: 36px 36px;
+  }
+
   .card {
-    @apply bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm;
+    @apply bg-white rounded-xl overflow-hidden;
+    border: 2px solid var(--grid-black);
+    box-shadow: 3px 3px 0 0 rgba(10, 10, 10, 0.85);
   }
   .btn {
     @apply inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
   }
   .btn-primary {
-    @apply btn bg-brand-600 text-white hover:bg-brand-700;
+    @apply btn text-black hover:brightness-95 border border-black/80;
+    background-color: var(--neon-yellow);
   }
   .btn-secondary {
-    @apply btn bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700;
+    @apply btn bg-slate-100 text-slate-700 hover:bg-slate-200;
   }
   .btn-ghost {
-    @apply btn text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800;
+    @apply btn text-slate-600 hover:bg-slate-100;
   }
   .btn-danger {
-    @apply btn bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-950 dark:text-red-400;
+    @apply btn bg-red-50 text-red-600 hover:bg-red-100;
   }
   .input {
-    @apply w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent;
+    @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:border-transparent;
+    --tw-ring-color: var(--neon-yellow);
   }
   .label {
-    @apply block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-1;
+    @apply block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1;
   }
   .badge {
     @apply inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium;

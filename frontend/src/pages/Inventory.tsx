@@ -23,7 +23,12 @@ export default function Inventory() {
   useEffect(() => {
     const t = setTimeout(() => {
       api
-        .listParts({ q, category_id: categoryId, location_id: locationId, low_stock_only: lowStockOnly })
+        .listParts({
+          q,
+          category_id: categoryId,
+          location_id: locationId,
+          low_stock_only: lowStockOnly,
+        })
         .then(setParts);
     }, 200);
     return () => clearTimeout(t);
@@ -34,8 +39,10 @@ export default function Inventory() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Inventory</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-1 text-sm">
-            {parts ? `${parts.length} part${parts.length === 1 ? "" : "s"}` : "Loading..."}
+          <p className="text-slate-800/70 mt-1 text-sm font-medium">
+            {parts
+              ? `${parts.length} part${parts.length === 1 ? "" : "s"}`
+              : "Loading..."}
           </p>
         </div>
         <Link to="/scan" className="btn-primary">
@@ -45,7 +52,10 @@ export default function Inventory() {
 
       <div className="card p-4 flex flex-wrap gap-3 items-center">
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+          <Search
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+            size={16}
+          />
           <input
             className="input pl-9"
             placeholder="Search by name, MPN, manufacturer, tag..."
@@ -53,16 +63,28 @@ export default function Inventory() {
             onChange={(e) => setQ(e.target.value)}
           />
         </div>
-        <select className="input w-auto" value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
+        <select
+          className="input w-auto"
+          value={categoryId}
+          onChange={(e) => setCategoryId(e.target.value)}
+        >
           <option value="">All categories</option>
           {categories.map((c) => (
-            <option key={c.id} value={c.id}>{c.name}</option>
+            <option key={c.id} value={c.id}>
+              {c.name}
+            </option>
           ))}
         </select>
-        <select className="input w-auto" value={locationId} onChange={(e) => setLocationId(e.target.value)}>
+        <select
+          className="input w-auto"
+          value={locationId}
+          onChange={(e) => setLocationId(e.target.value)}
+        >
           <option value="">All locations</option>
           {locations.map((l) => (
-            <option key={l.id} value={l.id}>{l.name}</option>
+            <option key={l.id} value={l.id}>
+              {l.name}
+            </option>
           ))}
         </select>
         <button

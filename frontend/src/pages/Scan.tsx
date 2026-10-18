@@ -1,6 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Camera, Upload, RefreshCw, CheckCircle2, PlusCircle, AlertTriangle } from "lucide-react";
+import {
+  Camera,
+  Upload,
+  RefreshCw,
+  CheckCircle2,
+  PlusCircle,
+  AlertTriangle,
+} from "lucide-react";
 import { api } from "../api/client";
 import type { Category, Location, ScanCandidate, ScanResult } from "../types";
 
@@ -30,12 +37,16 @@ export default function Scan() {
   const startCamera = useCallback(async () => {
     setCameraError(null);
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment" },
+      });
       streamRef.current = stream;
       if (videoRef.current) videoRef.current.srcObject = stream;
       setCameraOn(true);
     } catch (e: any) {
-      setCameraError("Couldn't access a camera. You can still upload a photo below.");
+      setCameraError(
+        "Couldn't access a camera. You can still upload a photo below.",
+      );
     }
   }, []);
 
@@ -81,8 +92,9 @@ export default function Scan() {
     <div className="space-y-6 max-w-4xl">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Scan a component</h1>
-        <p className="text-slate-500 dark:text-slate-400 mt-1 text-sm">
-          Use your webcam or upload a photo. SnapBin's AI will identify what it sees and suggest inventory entries.
+        <p className="text-slate-800/70 mt-1 text-sm font-medium">
+          Use your webcam or upload a photo. SnapBin's AI will identify what it
+          sees and suggest inventory entries.
         </p>
       </div>
 
@@ -91,7 +103,13 @@ export default function Scan() {
           <div>
             <div className="aspect-video bg-slate-900 rounded-lg overflow-hidden flex items-center justify-center relative">
               {cameraOn ? (
-                <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover" />
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  playsInline
+                  muted
+                  className="w-full h-full object-cover"
+                />
               ) : (
                 <div className="text-slate-500 text-sm flex flex-col items-center gap-2">
                   <Camera size={28} />
@@ -112,7 +130,11 @@ export default function Scan() {
                 </button>
               ) : (
                 <>
-                  <button className="btn-primary" onClick={capturePhoto} disabled={scanning}>
+                  <button
+                    className="btn-primary"
+                    onClick={capturePhoto}
+                    disabled={scanning}
+                  >
                     <Camera size={16} /> Capture &amp; identify
                   </button>
                   <button className="btn-ghost" onClick={stopCamera}>
@@ -123,14 +145,24 @@ export default function Scan() {
             </div>
           </div>
 
-          <div className="flex flex-col justify-center items-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-lg p-6 text-center">
+          <div className="flex flex-col justify-center items-center border-2 border-dashed border-slate-200 rounded-lg p-6 text-center">
             <Upload className="text-slate-400 mb-2" size={26} />
-            <p className="text-sm text-slate-500 dark:text-slate-400 mb-3">
-              Or upload a photo from your device — this also works for images pulled from a Raspberry Pi or ESP32-CAM
-              capture station.
+            <p className="text-sm text-slate-500 mb-3">
+              Or upload a photo from your device — this also works for images
+              pulled from a Raspberry Pi or ESP32-CAM capture station.
             </p>
-            <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={onFileChosen} />
-            <button className="btn-secondary" onClick={() => fileInputRef.current?.click()} disabled={scanning}>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={onFileChosen}
+            />
+            <button
+              className="btn-secondary"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={scanning}
+            >
               <Upload size={16} /> Choose file
             </button>
           </div>
@@ -139,12 +171,13 @@ export default function Scan() {
 
       {scanning && (
         <div className="card p-8 flex items-center justify-center gap-2 text-slate-500">
-          <RefreshCw className="animate-spin" size={18} /> Identifying component...
+          <RefreshCw className="animate-spin" size={18} /> Identifying
+          component...
         </div>
       )}
 
       {error && (
-        <div className="card p-5 border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-300 text-sm">
+        <div className="card p-5 border-red-200 bg-red-50 text-red-700 text-sm">
           {error}
         </div>
       )}
@@ -152,16 +185,27 @@ export default function Scan() {
       {result && (
         <div className="card p-5">
           <div className="flex gap-4 mb-4">
-            <img src={result.image_url} alt="captured" className="w-28 h-28 object-cover rounded-lg border border-slate-200 dark:border-slate-800" />
+            <img
+              src={result.image_url}
+              alt="captured"
+              className="w-28 h-28 object-cover rounded-lg border border-slate-200"
+            />
             <div>
               <h2 className="font-semibold">
-                {result.candidates.length} candidate{result.candidates.length === 1 ? "" : "s"} found
+                {result.candidates.length} candidate
+                {result.candidates.length === 1 ? "" : "s"} found
               </h2>
-              <p className="text-sm text-slate-500 dark:text-slate-400">Provider: {result.provider === "none" ? "not configured" : result.provider}</p>
+              <p className="text-sm text-slate-500">
+                Provider:{" "}
+                {result.provider === "none"
+                  ? "not configured"
+                  : result.provider}
+              </p>
               {result.provider === "none" && (
                 <p className="text-sm text-amber-600 mt-2">
-                  No AI provider is configured yet — add an API key in Settings to enable automatic recognition.
-                  You can still add this photo as a part manually below.
+                  No AI provider is configured yet — add an API key in Settings
+                  to enable automatic recognition. You can still add this photo
+                  as a part manually below.
                 </p>
               )}
             </div>
@@ -181,11 +225,17 @@ export default function Scan() {
             ))}
             {result.candidates.length === 0 && result.provider !== "none" && (
               <p className="text-sm text-slate-400 py-4 text-center">
-                No components recognized in that photo. Try a closer, well-lit shot.
+                No components recognized in that photo. Try a closer, well-lit
+                shot.
               </p>
             )}
             {result.candidates.length === 0 && (
-              <ManualAddRow imageUrl={result.image_url} categories={categories} locations={locations} onSaved={() => navigate("/inventory")} />
+              <ManualAddRow
+                imageUrl={result.image_url}
+                categories={categories}
+                locations={locations}
+                onSaved={() => navigate("/inventory")}
+              />
             )}
           </div>
         </div>
@@ -258,17 +308,31 @@ function CandidateRow({
   }
 
   return (
-    <div className="border border-slate-200 dark:border-slate-800 rounded-lg p-4">
+    <div className="border border-slate-200 rounded-lg p-4">
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div className="flex-1 min-w-[220px] space-y-2">
-          <input className="input font-medium" value={name} onChange={(e) => setName(e.target.value)} />
-          <p className="text-xs text-slate-500 dark:text-slate-400">{candidate.description}</p>
+          <input
+            className="input font-medium"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <p className="text-xs text-slate-500">{candidate.description}</p>
           <div className="flex flex-wrap gap-2 text-xs text-slate-500">
-            {candidate.manufacturer && <span className="badge bg-slate-100 dark:bg-slate-800">{candidate.manufacturer}</span>}
-            {candidate.mpn && <span className="badge bg-slate-100 dark:bg-slate-800">{candidate.mpn}</span>}
-            {candidate.value && <span className="badge bg-slate-100 dark:bg-slate-800">{candidate.value}</span>}
-            {candidate.package && <span className="badge bg-slate-100 dark:bg-slate-800">{candidate.package}</span>}
-            <span className="badge bg-brand-50 text-brand-700 dark:bg-brand-900/30 dark:text-brand-300">
+            {candidate.manufacturer && (
+              <span className="badge bg-slate-100">
+                {candidate.manufacturer}
+              </span>
+            )}
+            {candidate.mpn && (
+              <span className="badge bg-slate-100">{candidate.mpn}</span>
+            )}
+            {candidate.value && (
+              <span className="badge bg-slate-100">{candidate.value}</span>
+            )}
+            {candidate.package && (
+              <span className="badge bg-slate-100">{candidate.package}</span>
+            )}
+            <span className="badge bg-brand-50 text-brand-700">
               {Math.round(candidate.confidence * 100)}% confidence
             </span>
           </div>
@@ -287,10 +351,16 @@ function CandidateRow({
           {!candidate.matched_part_id && (
             <div>
               <label className="label">Category</label>
-              <select className="input w-40" value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
+              <select
+                className="input w-40"
+                value={categoryId}
+                onChange={(e) => setCategoryId(e.target.value)}
+              >
                 <option value="">None</option>
                 {categories.map((c) => (
-                  <option key={c.id} value={c.id}>{c.name}</option>
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
                 ))}
               </select>
             </div>
@@ -298,10 +368,16 @@ function CandidateRow({
           {!candidate.matched_part_id && (
             <div>
               <label className="label">Location</label>
-              <select className="input w-40" value={locationId} onChange={(e) => setLocationId(e.target.value)}>
+              <select
+                className="input w-40"
+                value={locationId}
+                onChange={(e) => setLocationId(e.target.value)}
+              >
                 <option value="">None</option>
                 {locations.map((l) => (
-                  <option key={l.id} value={l.id}>{l.name}</option>
+                  <option key={l.id} value={l.id}>
+                    {l.name}
+                  </option>
                 ))}
               </select>
             </div>
@@ -311,11 +387,20 @@ function CandidateRow({
 
       <div className="mt-3 flex gap-2">
         {candidate.matched_part_id ? (
-          <button className="btn-primary" onClick={handleIncrementExisting} disabled={saving}>
-            <PlusCircle size={16} /> Looks like existing stock — add {quantity} to it
+          <button
+            className="btn-primary"
+            onClick={handleIncrementExisting}
+            disabled={saving}
+          >
+            <PlusCircle size={16} /> Looks like existing stock — add {quantity}{" "}
+            to it
           </button>
         ) : (
-          <button className="btn-primary" onClick={handleSaveNew} disabled={saving}>
+          <button
+            className="btn-primary"
+            onClick={handleSaveNew}
+            disabled={saving}
+          >
             <PlusCircle size={16} /> Add as new part
           </button>
         )}
@@ -359,25 +444,52 @@ function ManualAddRow({
   }
 
   return (
-    <div className="border border-dashed border-slate-300 dark:border-slate-700 rounded-lg p-4 space-y-2">
+    <div className="border border-dashed border-slate-300 rounded-lg p-4 space-y-2">
       <label className="label">Add manually</label>
-      <input className="input" placeholder="Part name" value={name} onChange={(e) => setName(e.target.value)} />
+      <input
+        className="input"
+        placeholder="Part name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
       <div className="flex gap-2">
-        <input type="number" className="input w-24" value={quantity} min={0} onChange={(e) => setQuantity(Number(e.target.value))} />
-        <select className="input" value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
+        <input
+          type="number"
+          className="input w-24"
+          value={quantity}
+          min={0}
+          onChange={(e) => setQuantity(Number(e.target.value))}
+        />
+        <select
+          className="input"
+          value={categoryId}
+          onChange={(e) => setCategoryId(e.target.value)}
+        >
           <option value="">Category</option>
           {categories.map((c) => (
-            <option key={c.id} value={c.id}>{c.name}</option>
+            <option key={c.id} value={c.id}>
+              {c.name}
+            </option>
           ))}
         </select>
-        <select className="input" value={locationId} onChange={(e) => setLocationId(e.target.value)}>
+        <select
+          className="input"
+          value={locationId}
+          onChange={(e) => setLocationId(e.target.value)}
+        >
           <option value="">Location</option>
           {locations.map((l) => (
-            <option key={l.id} value={l.id}>{l.name}</option>
+            <option key={l.id} value={l.id}>
+              {l.name}
+            </option>
           ))}
         </select>
       </div>
-      <button className="btn-primary" onClick={handleSave} disabled={saving || !name.trim()}>
+      <button
+        className="btn-primary"
+        onClick={handleSave}
+        disabled={saving || !name.trim()}
+      >
         <PlusCircle size={16} /> Add to inventory
       </button>
     </div>

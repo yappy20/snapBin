@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ArrowLeft, Plus, Trash2, Zap, AlertTriangle, Trash } from "lucide-react";
+import {
+  ArrowLeft,
+  Plus,
+  Trash2,
+  Zap,
+  AlertTriangle,
+  Trash,
+} from "lucide-react";
 import { api } from "../api/client";
 import type { Part, Project } from "../types";
 import Loading from "../components/Loading";
@@ -64,7 +71,9 @@ export default function ProjectDetail() {
       <div className="flex items-start justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">{project.name}</h1>
-          {project.description && <p className="text-slate-500 dark:text-slate-400 mt-1 text-sm">{project.description}</p>}
+          {project.description && (
+            <p className="text-slate-800/70 mt-1 text-sm font-medium">{project.description}</p>
+          )}
         </div>
         <button className="btn-danger" onClick={remove}>
           <Trash2 size={15} /> Delete project
@@ -79,7 +88,7 @@ export default function ProjectDetail() {
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-xs uppercase tracking-wide text-slate-400 border-b border-slate-100 dark:border-slate-800">
+              <tr className="text-left text-xs uppercase tracking-wide text-slate-400 border-b border-slate-100">
                 <th className="py-2 font-medium">Part</th>
                 <th className="py-2 font-medium">Required</th>
                 <th className="py-2 font-medium">In stock</th>
@@ -90,17 +99,29 @@ export default function ProjectDetail() {
               {project.bom_items.map((item) => {
                 const short = item.part.quantity < item.quantity_required;
                 return (
-                  <tr key={item.id} className="border-b border-slate-50 dark:border-slate-900 last:border-0">
+                  <tr
+                    key={item.id}
+                    className="border-b border-slate-50 last:border-0"
+                  >
                     <td className="py-2.5">{item.part.name}</td>
                     <td className="py-2.5">{item.quantity_required}</td>
                     <td className="py-2.5">
-                      <span className={short ? "text-amber-600 font-medium flex items-center gap-1" : ""}>
+                      <span
+                        className={
+                          short
+                            ? "text-amber-600 font-medium flex items-center gap-1"
+                            : ""
+                        }
+                      >
                         {short && <AlertTriangle size={13} />}
                         {item.part.quantity}
                       </span>
                     </td>
                     <td className="py-2.5 text-right">
-                      <button className="btn-ghost px-2" onClick={() => removeItem(item.id)}>
+                      <button
+                        className="btn-ghost px-2"
+                        onClick={() => removeItem(item.id)}
+                      >
                         <Trash size={14} />
                       </button>
                     </td>
@@ -111,15 +132,31 @@ export default function ProjectDetail() {
           </table>
         )}
 
-        <div className="flex gap-2 mt-4 pt-4 border-t border-slate-100 dark:border-slate-800">
-          <select className="input" value={partId} onChange={(e) => setPartId(e.target.value)}>
+        <div className="flex gap-2 mt-4 pt-4 border-t border-slate-100">
+          <select
+            className="input"
+            value={partId}
+            onChange={(e) => setPartId(e.target.value)}
+          >
             <option value="">Select a part...</option>
             {parts.map((p) => (
-              <option key={p.id} value={p.id}>{p.name}</option>
+              <option key={p.id} value={p.id}>
+                {p.name}
+              </option>
             ))}
           </select>
-          <input type="number" min={1} className="input w-24" value={qty} onChange={(e) => setQty(Number(e.target.value))} />
-          <button className="btn-secondary shrink-0" onClick={addItem} disabled={!partId}>
+          <input
+            type="number"
+            min={1}
+            className="input w-24"
+            value={qty}
+            onChange={(e) => setQty(Number(e.target.value))}
+          />
+          <button
+            className="btn-secondary shrink-0"
+            onClick={addItem}
+            disabled={!partId}
+          >
             <Plus size={16} /> Add
           </button>
         </div>

@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ArrowLeft, Minus, Plus, Save, Trash2, ImageOff, ExternalLink, Search } from "lucide-react";
+import {
+  ArrowLeft,
+  Minus,
+  Plus,
+  Save,
+  Trash2,
+  ImageOff,
+  ExternalLink,
+  Search,
+} from "lucide-react";
 import { api } from "../api/client";
 import type { Category, Location, Part } from "../types";
 import Loading from "../components/Loading";
@@ -80,24 +89,41 @@ export default function PartDetail() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="card overflow-hidden">
-          <div className="aspect-square bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+          <div className="aspect-square bg-slate-100 flex items-center justify-center">
             {part.image_url ? (
-              <img src={part.image_url} alt={part.name} className="w-full h-full object-cover" />
+              <img
+                src={part.image_url}
+                alt={part.name}
+                className="w-full h-full object-cover"
+              />
             ) : (
-              <ImageOff className="text-slate-300 dark:text-slate-700" size={40} />
+              <ImageOff className="text-slate-300" size={40} />
             )}
           </div>
           <div className="p-4 space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-sm text-slate-500">Quantity</span>
-              {low && <span className="badge bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">Low stock</span>}
+              {low && (
+                <span className="badge bg-amber-100 text-amber-700">
+                  Low stock
+                </span>
+              )}
             </div>
             <div className="flex items-center gap-2">
-              <button className="btn-secondary px-2.5" onClick={() => adjust(-1)} disabled={part.quantity <= 0}>
+              <button
+                className="btn-secondary px-2.5"
+                onClick={() => adjust(-1)}
+                disabled={part.quantity <= 0}
+              >
                 <Minus size={16} />
               </button>
-              <span className="flex-1 text-center text-2xl font-bold tabular-nums">{part.quantity}</span>
-              <button className="btn-secondary px-2.5" onClick={() => adjust(1)}>
+              <span className="flex-1 text-center text-2xl font-bold tabular-nums">
+                {part.quantity}
+              </span>
+              <button
+                className="btn-secondary px-2.5"
+                onClick={() => adjust(1)}
+              >
                 <Plus size={16} />
               </button>
             </div>
@@ -108,50 +134,126 @@ export default function PartDetail() {
         <div className="md:col-span-2 card p-5 space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <Field label="Name" full>
-              <input className="input" value={part.name} onChange={(e) => setPart({ ...part, name: e.target.value })} />
+              <input
+                className="input"
+                value={part.name}
+                onChange={(e) => setPart({ ...part, name: e.target.value })}
+              />
             </Field>
             <Field label="Manufacturer">
-              <input className="input" value={part.manufacturer || ""} onChange={(e) => setPart({ ...part, manufacturer: e.target.value })} />
+              <input
+                className="input"
+                value={part.manufacturer || ""}
+                onChange={(e) =>
+                  setPart({ ...part, manufacturer: e.target.value })
+                }
+              />
             </Field>
             <Field label="MPN">
-              <input className="input" value={part.mpn || ""} onChange={(e) => setPart({ ...part, mpn: e.target.value })} />
+              <input
+                className="input"
+                value={part.mpn || ""}
+                onChange={(e) => setPart({ ...part, mpn: e.target.value })}
+              />
             </Field>
             <Field label="Value">
-              <input className="input" value={part.value || ""} onChange={(e) => setPart({ ...part, value: e.target.value })} />
+              <input
+                className="input"
+                value={part.value || ""}
+                onChange={(e) => setPart({ ...part, value: e.target.value })}
+              />
             </Field>
             <Field label="Package">
-              <input className="input" value={part.package || ""} onChange={(e) => setPart({ ...part, package: e.target.value })} />
+              <input
+                className="input"
+                value={part.package || ""}
+                onChange={(e) => setPart({ ...part, package: e.target.value })}
+              />
             </Field>
             <Field label="Category">
-              <select className="input" value={part.category_id ?? ""} onChange={(e) => setPart({ ...part, category_id: e.target.value ? Number(e.target.value) : null })}>
+              <select
+                className="input"
+                value={part.category_id ?? ""}
+                onChange={(e) =>
+                  setPart({
+                    ...part,
+                    category_id: e.target.value ? Number(e.target.value) : null,
+                  })
+                }
+              >
                 <option value="">None</option>
                 {categories.map((c) => (
-                  <option key={c.id} value={c.id}>{c.name}</option>
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
                 ))}
               </select>
             </Field>
             <Field label="Location">
-              <select className="input" value={part.location_id ?? ""} onChange={(e) => setPart({ ...part, location_id: e.target.value ? Number(e.target.value) : null })}>
+              <select
+                className="input"
+                value={part.location_id ?? ""}
+                onChange={(e) =>
+                  setPart({
+                    ...part,
+                    location_id: e.target.value ? Number(e.target.value) : null,
+                  })
+                }
+              >
                 <option value="">None</option>
                 {locations.map((l) => (
-                  <option key={l.id} value={l.id}>{l.name}</option>
+                  <option key={l.id} value={l.id}>
+                    {l.name}
+                  </option>
                 ))}
               </select>
             </Field>
             <Field label="Low stock threshold">
-              <input type="number" className="input" value={part.quantity_threshold} onChange={(e) => setPart({ ...part, quantity_threshold: Number(e.target.value) })} />
+              <input
+                type="number"
+                className="input"
+                value={part.quantity_threshold}
+                onChange={(e) =>
+                  setPart({
+                    ...part,
+                    quantity_threshold: Number(e.target.value),
+                  })
+                }
+              />
             </Field>
             <Field label="Description" full>
-              <textarea className="input" rows={2} value={part.description || ""} onChange={(e) => setPart({ ...part, description: e.target.value })} />
+              <textarea
+                className="input"
+                rows={2}
+                value={part.description || ""}
+                onChange={(e) =>
+                  setPart({ ...part, description: e.target.value })
+                }
+              />
             </Field>
             <Field label="Tags (comma-separated)" full>
-              <input className="input" value={part.tags || ""} onChange={(e) => setPart({ ...part, tags: e.target.value })} />
+              <input
+                className="input"
+                value={part.tags || ""}
+                onChange={(e) => setPart({ ...part, tags: e.target.value })}
+              />
             </Field>
             <Field label="Datasheet URL" full>
               <div className="flex gap-2">
-                <input className="input" value={part.datasheet_url || ""} onChange={(e) => setPart({ ...part, datasheet_url: e.target.value })} />
+                <input
+                  className="input"
+                  value={part.datasheet_url || ""}
+                  onChange={(e) =>
+                    setPart({ ...part, datasheet_url: e.target.value })
+                  }
+                />
                 {part.datasheet_url && (
-                  <a href={part.datasheet_url} target="_blank" rel="noreferrer" className="btn-secondary shrink-0">
+                  <a
+                    href={part.datasheet_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-secondary shrink-0"
+                  >
                     <ExternalLink size={15} />
                   </a>
                 )}
@@ -159,7 +261,7 @@ export default function PartDetail() {
             </Field>
           </div>
 
-          <div className="flex items-center gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
             <button className="btn-primary" onClick={save} disabled={saving}>
               <Save size={16} /> Save changes
             </button>
@@ -172,11 +274,17 @@ export default function PartDetail() {
           </div>
 
           {links && (
-            <div className="pt-3 border-t border-slate-100 dark:border-slate-800">
+            <div className="pt-3 border-t border-slate-100">
               <p className="label mb-2">Reorder / spec lookup</p>
               <div className="flex flex-wrap gap-2">
                 {Object.entries(links).map(([name, url]) => (
-                  <a key={name} href={url} target="_blank" rel="noreferrer" className="btn-secondary">
+                  <a
+                    key={name}
+                    href={url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-secondary"
+                  >
                     {name} <ExternalLink size={14} />
                   </a>
                 ))}
@@ -189,7 +297,15 @@ export default function PartDetail() {
   );
 }
 
-function Field({ label, children, full }: { label: string; children: React.ReactNode; full?: boolean }) {
+function Field({
+  label,
+  children,
+  full,
+}: {
+  label: string;
+  children: React.ReactNode;
+  full?: boolean;
+}) {
   return (
     <div className={full ? "col-span-2" : ""}>
       <label className="label">{label}</label>
