@@ -3,55 +3,172 @@
 @tailwind utilities;
 
 :root {
-  --neon-yellow: #eeff26;
-  --grid-black: #0a0a0a;
+  --foundation: #ffffff;
+  --mat: #2a9a4e;
+  --mat-deep: #145c34;
+  --copper: #9a4b1f;
+  --copper-wash: #f3e6d8;
+  --gold: #d4a017;
+  --band-brown: #6b3a2a;
+  --band-orange: #e07a2f;
+  --band-red: #d64532;
+  --ceramic: #3b6fd6;
+  --wash-resistor: #f8efe2;
+  --wash-cap: #e7eefb;
+  --wash-led: #fdecec;
+  --wash-chip: #ececef;
 }
 
 @layer base {
   html {
     font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+    background-color: var(--mat);
+    min-height: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
   }
   body {
     @apply text-slate-900;
-    background-color: var(--neon-yellow);
     margin: 0;
+    min-height: 100vh;
+    background-color: var(--mat);
+  }
+  /* The grid stays fixed to the window. Page sections scroll over it. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-color: var(--mat);
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.92) 1.5px, transparent 1.5px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.92) 1.5px, transparent 1.5px),
+      linear-gradient(to right, rgba(255, 255, 255, 0.38) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.38) 1px, transparent 1px);
+    background-size: 200px 200px, 200px 200px, 40px 40px, 40px 40px;
+    animation: grid-drift 26s ease-in-out infinite alternate;
+  }
+  #root {
+    position: relative;
+    z-index: 1;
     min-height: 100vh;
   }
 }
 
 @layer components {
-  /* The app's chrome lives directly on top of the neon-yellow/black-grid
-     canvas — inset from the true viewport edge so a yellow margin always
-     shows around it — instead of hiding it behind a solid white sheet.
-     The sidebar sits as a solid black block on the grid, and content (page
-     headers, empty states) sits right on the grid itself; individual
-     cards read as bordered white "sheets" pinned to it. */
+  /* The green cutting mat covers the whole page. Cards stay white
+     sheets on top of it. */
   .app-shell {
     position: relative;
-    margin: clamp(20px, 4vw, 44px);
-    min-height: calc(100vh - clamp(40px, 8vw, 88px));
-    border: 3px solid var(--grid-black);
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 8px 8px 0 0 rgba(10, 10, 10, 0.9);
-    background-color: var(--neon-yellow);
-    background-image:
-      linear-gradient(to right, rgba(10, 10, 10, 0.85) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(10, 10, 10, 0.85) 1px, transparent 1px);
-    background-size: 36px 36px;
+    min-height: 100vh;
+  }
+
+  @keyframes grid-drift {
+    from { background-position: 0 0, 0 0, 0 0, 0 0; }
+    to { background-position: 20px 12px, 20px 12px, 20px 12px, 20px 12px; }
+  }
+
+  @keyframes settle {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  @keyframes floaty {
+    from { transform: translateY(0); }
+    to { transform: translateY(-8px); }
+  }
+
+  @keyframes led-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.45; }
+  }
+
+  @keyframes bar-grow {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+
+  .settle {
+    animation: settle 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .hero-float {
+    animation: floaty 5.5s ease-in-out infinite alternate;
+  }
+
+  .part-pop {
+    animation: settle 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .led-dome {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: led-pulse 2.6s ease-in-out infinite;
+  }
+
+  .bar-fill {
+    transform-origin: left center;
+    transform: scaleX(0);
+  }
+
+  .bar-fill.is-in {
+    animation: bar-grow 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .rise {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    .rise.is-in {
+      animation: settle 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .reveal-grid[data-shown="true"] > * {
+      animation: settle 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .reveal-grid[data-shown="true"] > *:nth-child(2) { animation-delay: 0.06s; }
+    .reveal-grid[data-shown="true"] > *:nth-child(3) { animation-delay: 0.12s; }
+    .reveal-grid[data-shown="true"] > *:nth-child(4) { animation-delay: 0.18s; }
+    .reveal-grid[data-shown="true"] > *:nth-child(5) { animation-delay: 0.24s; }
+    .reveal-grid[data-shown="true"] > *:nth-child(6) { animation-delay: 0.3s; }
+    .reveal-grid:not([data-shown="true"]) > * {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    body::before,
+    .settle,
+    .hero-float,
+    .part-pop,
+    .led-dome,
+    .bar-fill,
+    .bar-fill.is-in,
+    .rise,
+    .rise.is-in {
+      animation: none;
+    }
+    .bar-fill { transform: none; }
   }
 
   .card {
     @apply bg-white rounded-xl overflow-hidden;
-    border: 2px solid var(--grid-black);
-    box-shadow: 3px 3px 0 0 rgba(10, 10, 10, 0.85);
+    border: 2px solid var(--foundation);
+    box-shadow: 3px 3px 0 0 var(--mat-deep);
   }
   .btn {
     @apply inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
   }
   .btn-primary {
-    @apply btn text-black hover:brightness-95 border border-black/80;
-    background-color: var(--neon-yellow);
+    @apply btn border-2 hover:brightness-95;
+    color: var(--mat-deep);
+    background-color: var(--foundation);
+    border-color: var(--foundation);
+    box-shadow: 2px 2px 0 0 var(--mat-deep);
   }
   .btn-secondary {
     @apply btn bg-slate-100 text-slate-700 hover:bg-slate-200;
@@ -64,7 +181,7 @@
   }
   .input {
     @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:border-transparent;
-    --tw-ring-color: var(--neon-yellow);
+    --tw-ring-color: var(--mat);
   }
   .label {
     @apply block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1;

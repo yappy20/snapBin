@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Plus, Search, SlidersHorizontal } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import { api } from "../api/client";
 import type { Category, Location, Part } from "../types";
 import PartCard from "../components/PartCard";
@@ -13,7 +13,6 @@ export default function Inventory() {
   const [q, setQ] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [locationId, setLocationId] = useState("");
-  const [lowStockOnly, setLowStockOnly] = useState(false);
 
   useEffect(() => {
     api.listCategories().then(setCategories);
@@ -27,19 +26,25 @@ export default function Inventory() {
           q,
           category_id: categoryId,
           location_id: locationId,
-          low_stock_only: lowStockOnly,
         })
         .then(setParts);
     }, 200);
     return () => clearTimeout(t);
-  }, [q, categoryId, locationId, lowStockOnly]);
+  }, [q, categoryId, locationId]);
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <div>
+        <div
+          className="w-fit rounded-lg border-2 px-3 py-1.5"
+          style={{
+            backgroundColor: "var(--foundation)",
+            borderColor: "var(--foundation)",
+            boxShadow: "3px 3px 0 0 var(--mat-deep)",
+          }}
+        >
           <h1 className="text-2xl font-bold tracking-tight">Inventory</h1>
-          <p className="text-slate-800/70 mt-1 text-sm font-medium">
+          <p className="text-slate-800/70 mt-0.5 text-sm font-medium">
             {parts
               ? `${parts.length} part${parts.length === 1 ? "" : "s"}`
               : "Loading..."}
@@ -87,12 +92,6 @@ export default function Inventory() {
             </option>
           ))}
         </select>
-        <button
-          className={`btn ${lowStockOnly ? "btn-primary" : "btn-secondary"}`}
-          onClick={() => setLowStockOnly((v) => !v)}
-        >
-          <SlidersHorizontal size={15} /> Low stock only
-        </button>
       </div>
 
       {!parts ? (

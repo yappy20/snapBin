@@ -92,10 +92,6 @@ export default function Scan() {
     <div className="space-y-6 max-w-4xl">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Scan a component</h1>
-        <p className="text-slate-800/70 mt-1 text-sm font-medium">
-          Use your webcam or upload a photo. SnapBin's AI will identify what it
-          sees and suggest inventory entries.
-        </p>
       </div>
 
       <div className="card p-5">

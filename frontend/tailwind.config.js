@@ -6,19 +6,16 @@ export default {
     extend: {
       colors: {
         brand: {
-          // Pale-yellow tints for chip/icon backgrounds, neon yellow for
-          // accent borders, and near-black for text/icons on top of them —
-          // matches the neon-yellow/black-grid theme instead of the old blue.
-          50: "#fdfde3",
-          100: "#fbfbb8",
-          200: "#f7f87a",
-          300: "#eeff26",
-          400: "#d4e600",
-          500: "#b8cc00",
-          600: "#0a0a0a",
-          700: "#000000",
-          800: "#000000",
-          900: "#000000",
+          50: "#f3faf5",
+          100: "#e2f5e8",
+          200: "#bfe8cd",
+          300: "#7dcea0",
+          400: "#3cb371",
+          500: "#2a9a4e",
+          600: "#145c34",
+          700: "#0f4d2b",
+          800: "#0c3b21",
+          900: "#082616",
         },
       },
       fontFamily: {
